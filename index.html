@@ -5,17 +5,66 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="refresh" content="0;url=https://cambridge-climbing-roughly-von.trycloudflare.com/app/">
 <title>Dusty Fox Fauxs</title>
-<style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#0B0B0D;color:#F4F1EC;font-family:system-ui,sans-serif;text-align:center;padding:24px}a{color:#E9B872}</style>
+<style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#0B0B0D;color:#F4F1EC;font-family:system-ui,sans-serif;text-align:center;padding:24px}a{color:#E9B872}main{width:100%;max-width:360px}h1{font-weight:600;margin:0 0 12px}form{display:grid;gap:12px;margin:20px 0}label{text-align:left;font-size:14px;color:#9A948C}input{font:inherit;font-size:18px;padding:14px;border-radius:12px;border:1px solid #3A3631;background:#16161A;color:#F4F1EC}button{font:inherit;font-weight:600;padding:14px;border:0;border-radius:12px;background:#E9B872;color:#0B0B0D}.err{color:#E9B872;min-height:1.2em;font-size:14px;margin:0}</style>
 </head>
 <body>
 <main>
 <h1>Dusty Fox Fauxs</h1>
-<p>Opening your jacket studio&hellip;</p>
-<p><a href="https://cambridge-climbing-roughly-von.trycloudflare.com/app/">Tap here if it does not open</a></p>
+<p id="msg">Opening your jacket studio&hellip;</p>
+<form id="form" hidden>
+<label for="code">Code from your friend</label>
+<input id="code" name="code" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="64">
+<p class="err" id="err" aria-live="polite"></p>
+<button type="submit">Open Dusty Fox Fauxs</button>
+</form>
+<p><a id="go" href="https://craps-hello-arabia-wales.trycloudflare.com/app/">Tap here if it does not open</a></p>
 <p style="color:#9A948C;font-size:14px">If the studio does not load, the preparation laptop may be switched off. Try again later.</p>
 </main>
-<script>location.replace("https://cambridge-climbing-roughly-von.trycloudflare.com/app/");</script>
+<noscript><p><a href="https://craps-hello-arabia-wales.trycloudflare.com/app/">Open the studio</a></p></noscript>
+<script>
+(function () {
+  var link = "https://craps-hello-arabia-wales.trycloudflare.com/app/";
+  var secret = '', code = '';
+  var CODE = /^[A-Za-z0-9_-]{16,64}$/;  // matches the app (16+)
+  try {
+    secret = localStorage.getItem('dustyfox-install') || '';
+    if (!/^[0-9a-f]{64}$/.test(secret)) {
+      var bytes = new Uint8Array(32);
+      crypto.getRandomValues(bytes);
+      secret = Array.prototype.map.call(bytes, function (b) { return ('0' + b.toString(16)).slice(-2); }).join('');
+      localStorage.setItem('dustyfox-install', secret);
+    }
+  } catch (e) { secret = ''; }
+  try { code = localStorage.getItem('dustyfox-code') || ''; } catch (e) { code = ''; }
+  if (!CODE.test(code)) code = '';
+  function target(c) {
+    var parts = [];
+    if (c) parts.push('code=' + encodeURIComponent(c));
+    if (secret) parts.push('install=' + secret);
+    return parts.length ? link + (link.indexOf('#') < 0 ? '#' : '&') + parts.join('&') : link;
+  }
+  function open(c) {
+    var url = target(c);
+    document.getElementById('go').href = url;
+    location.replace(url);
+  }
+  var change = /[?&]change(=|&|$)/.test(location.search);
+  if (code && !change) { open(code); return; }
+  var form = document.getElementById('form'), field = document.getElementById('code'), err = document.getElementById('err');
+  document.getElementById('msg').textContent = 'Enter the code to open your jacket studio.';
+  document.getElementById('go').parentNode.hidden = true;
+  form.hidden = false;
+  field.value = code;
+  field.focus();
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+    var value = field.value.trim();
+    if (!CODE.test(value)) { err.textContent = 'That code does not look right. Copy it again.'; return; }
+    try { localStorage.setItem('dustyfox-code', value); } catch (e) { /* private mode: still open it */ }
+    open(value);
+  });
+})();
+</script>
 </body>
 </html>
