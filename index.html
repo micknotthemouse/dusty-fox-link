@@ -26,7 +26,7 @@
 (function () {
   var link = "https://craps-hello-arabia-wales.trycloudflare.com/app/";
   var secret = '', code = '';
-  var CODE = /^[A-Za-z0-9_-]{16,64}$/;  // matches the app (16+)
+  var CODE = /^[A-Za-z0-9_-]{4,64}$/;  // matches the app (4+)
   try {
     secret = localStorage.getItem('dustyfox-install') || '';
     if (!/^[0-9a-f]{64}$/.test(secret)) {
