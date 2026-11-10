@@ -18,13 +18,14 @@
 <p class="err" id="err" aria-live="polite"></p>
 <button type="submit">Open Dusty Fox Fauxs</button>
 </form>
-<p><a id="go" href="https://joined-dawn-sofa-pushed.trycloudflare.com/app/">Tap here if it does not open</a></p>
+<p><a id="go" href="https://lowest-ask-losing-jon.trycloudflare.com/app/">Tap here if it does not open</a></p>
 <p style="color:#9A948C;font-size:14px">If the studio does not load, the preparation laptop may be switched off. Try again later.</p>
 </main>
-<noscript><p><a href="https://joined-dawn-sofa-pushed.trycloudflare.com/app/">Open the studio</a></p></noscript>
+<noscript><p><a href="https://lowest-ask-losing-jon.trycloudflare.com/app/">Open the studio</a></p></noscript>
 <script>
 (function () {
-  var link = "https://joined-dawn-sofa-pushed.trycloudflare.com/app/";
+  var link = "https://lowest-ask-losing-jon.trycloudflare.com/app/";  // fallback; link.json (fetched below) holds the current address
+  var OK = new RegExp("^https://[a-z0-9-]+\\.trycloudflare\\.com/app/$");
   var secret = '', code = '';
   var CODE = /^[A-Za-z0-9_-]{4,64}$/;  // matches the app (4+)
   try {
@@ -44,10 +45,29 @@
     if (secret) parts.push('install=' + secret);
     return parts.length ? link + (link.indexOf('#') < 0 ? '#' : '&') + parts.join('&') : link;
   }
+  function resolve(done) {  // the current address from link.json, else the embedded one; always calls done once
+    var fin = false;
+    function finish(v) {
+      if (fin) return;
+      fin = true;
+      if (typeof v === 'string' && OK.test(v)) link = v;
+      done();
+    }
+    setTimeout(finish, 4500);
+    try {
+      var ctl = window.AbortController ? new AbortController() : null;
+      if (ctl) setTimeout(function () { ctl.abort(); }, 4000);
+      fetch('link.json?t=' + Date.now(), {cache: 'no-store', signal: ctl ? ctl.signal : undefined})
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (j) { finish(j && j.app); }, function () { finish(); });
+    } catch (e) { finish(); }
+  }
   function open(c) {
-    var url = target(c);
-    document.getElementById('go').href = url;
-    location.replace(url);
+    resolve(function () {
+      var url = target(c);
+      document.getElementById('go').href = url;
+      location.replace(url);
+    });
   }
   var change = /[?&]change(=|&|$)/.test(location.search);
   if (code && !change) { open(code); return; }
